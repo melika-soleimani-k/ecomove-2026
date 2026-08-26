@@ -13,7 +13,7 @@
 :root{
   --bg:#0B0E14; --bg2:#0D1220; --surface:#101624; --surface2:#141C2E;
   --line:rgba(148,163,184,.14); --line-strong:rgba(148,163,184,.28);
-  --ink:#E8EDF6; --muted:#8B96AB; --faint:#5B6activation? no;
+  --ink:#E8EDF6; --muted:#8B96AB;
 }
 :root{
   --ink:#E8EDF6; --muted:#8B96AB;
@@ -32,7 +32,6 @@ body{
   background:var(--bg); color:var(--ink); font:400 15px/1.55 var(--body);
   min-height:100vh; overflow-x:hidden;
 }
-/* ambient layered background */
 body::before{content:"";position:fixed;inset:0;z-index:-2;
   background:
     radial-gradient(900px 500px at 12% -8%, rgba(16,185,129,.10), transparent 60%),
@@ -64,6 +63,8 @@ svg text{font-family:var(--mono)}
 .city-sel:hover{border-color:var(--transit)}
 .live-badge{display:flex;align-items:center;gap:8px;padding:7px 13px;border-radius:999px;
   background:var(--heavy-dim);border:1px solid rgba(239,68,68,.4);font:700 12px var(--display);letter-spacing:.02em}
+.sim-badge{display:flex;align-items:center;gap:8px;padding:7px 13px;border-radius:999px;
+  background:var(--moderate-dim);border:1px solid rgba(245,158,11,.4);font:700 12px var(--display);letter-spacing:.02em}
 .live-dot{width:8px;height:8px;border-radius:50%;background:var(--heavy);animation:pulse 1.6s infinite}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(239,68,68,.55)}70%{box-shadow:0 0 0 9px rgba(239,68,68,0)}100%{box-shadow:0 0 0 0 rgba(239,68,68,0)}}
 .nav-tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:4px;margin-left:auto}
@@ -120,6 +121,7 @@ svg text{font-family:var(--mono)}
 .meter i{position:absolute;top:-4px;width:3px;height:15px;border-radius:2px;background:#fff;box-shadow:0 0 8px rgba(255,255,255,.8);left:0;transition:left 1s var(--ease)}
 .flash{animation:flash .6s}
 @keyframes flash{0%{color:var(--eco)}100%{color:var(--ink)}}
+.modeled-note{font:500 10px var(--mono);color:var(--muted);margin-top:4px;opacity:.7}
 
 /* ================= DASHBOARD GRID ================= */
 .dash{display:grid;grid-template-columns:minmax(0,1fr) 348px;gap:16px;align-items:start}
@@ -330,6 +332,10 @@ svg text{font-family:var(--mono)}
   background:rgba(6,182,212,.05);font-size:13px;color:#B9C6D9}
 .dev-note b{color:var(--transit)}
 
+/* ================= FOOTER ================= */
+.footer{max-width:1440px;margin:0 auto;padding:24px 22px 40px;border-top:1px solid var(--line);color:var(--muted);font-size:11.5px;line-height:1.9}
+.footer b{color:var(--ink);font-weight:600}
+
 /* ================= RESPONSIVE ================= */
 @media(max-width:1120px){
   .dash{grid-template-columns:1fr}.planner{grid-template-columns:1fr}
@@ -369,6 +375,7 @@ svg text{font-family:var(--mono)}
   </select>
 
   <div class="live-badge"><span class="live-dot"></span> LIVE · Match 14 · Group Stage</div>
+  <div class="sim-badge">⚠ SIMULATED FEED</div>
 
   <nav class="nav-tabs" aria-label="Views">
     <button class="active" data-view="dashboard">⌂ Dashboard</button>
@@ -390,7 +397,7 @@ svg text{font-family:var(--mono)}
       <p class="kicker">Toronto <b>//</b> Live Match-Day Operations</p>
       <h1 id="cityTitle">Toronto — Match-Day Mobility Command</h1>
     </div>
-    <p>Real-time congestion around <b id="stadiumTop">BMO Field</b> and the city's eco-transport response. Data refreshes every 5 seconds.</p>
+    <p>Real-time congestion around <b id="stadiumTop">BMO Field</b> and the city's eco-transport response. Simulated match-day data refreshes every 5 seconds.</p>
   </div>
 
   <!-- Global metrics bar -->
@@ -399,6 +406,7 @@ svg text{font-family:var(--mono)}
       <p class="t-label">CO₂ Saved Today 🌱</p>
       <p class="t-val"><span id="mCo2">0.00</span> t</p>
       <p class="t-sub"><span class="chip up">▲ +12.4% vs Match 12</span> vs all-car baseline</p>
+      <p class="modeled-note">modeled · upper-bound case</p>
     </div>
     <div class="tile cyan">
       <p class="t-label">Transit Adoption 🚌</p>
@@ -410,6 +418,7 @@ svg text{font-family:var(--mono)}
         <div><p class="t-val" style="margin:0"><span id="mAdopt">0</span>%</p>
         <p class="t-sub">of fans on green modes</p></div>
       </div>
+      <p class="modeled-note">scenario assumption</p>
     </div>
     <div class="tile violet">
       <p class="t-label">Active Eco-Fans ⚡</p>
@@ -419,12 +428,14 @@ svg text{font-family:var(--mono)}
         <polygon class="area" points="0,30 15,26 30,27 45,20 60,22 75,14 90,16 105,8 120,10 120,36 0,36"/>
         <polyline points="0,30 15,26 30,27 45,20 60,22 75,14 90,16 105,8 120,10"/>
       </svg></p>
+      <p class="modeled-note">modeled</p>
     </div>
     <div class="tile amber">
       <p class="t-label">Congestion Index 🚦</p>
       <p class="t-val"><span id="mCong">0.0</span><span style="font-size:14px;color:var(--muted)"> /10</span></p>
       <div class="meter"><i id="congMark"></i></div>
       <p class="t-sub" style="margin-top:8px"><span class="chip warn">Heavy near Gate C</span></p>
+      <p class="modeled-note">modeled</p>
     </div>
   </div>
 
@@ -478,7 +489,7 @@ svg text{font-family:var(--mono)}
             <text x="70" y="290" fill="#10B981" font-size="10" letter-spacing="2">KING ST · FLOWING</text>
           </g>
 
-          <!-- METRO -->
+          <!-- TRANSIT -->
           <g id="layer-metro" class="layer">
             <path id="metroPath" d="M110 70 C 210 170, 250 280, 330 320 S 470 400, 470 420 S 560 452, 600 462" fill="none" stroke="#06B6D4" stroke-width="3.5"/>
             <path d="M110 70 C 210 170, 250 280, 330 320 S 470 400, 470 420 S 560 452, 600 462" fill="none" stroke="#06B6D4" stroke-width="9" opacity=".16"/>
@@ -489,7 +500,7 @@ svg text{font-family:var(--mono)}
             <g transform="translate(470,420)"><g class="pin" data-name="Union Station" data-info="Line 1 · train every 4 min · GO link">
               <circle class="pin-halo" r="12" fill="none" stroke="#06B6D4" stroke-width="1.5"/>
               <circle r="10" fill="#06B6D4"/><text y="3.5" text-anchor="middle" font-size="10" font-weight="700" fill="#04222B">M</text></g></g>
-            <g transform="translate(600,462)"><g class="pin" data-name="Exhibition Station" data-info="Closest metro to Gate B · 6 min walk">
+            <g transform="translate(600,462)"><g class="pin" data-name="Exhibition Station" data-info="Closest transit to Gate B · 6 min walk">
               <circle class="pin-halo" r="12" fill="none" stroke="#06B6D4" stroke-width="1.5"/>
               <circle r="10" fill="#06B6D4"/><text y="3.5" text-anchor="middle" font-size="10" font-weight="700" fill="#04222B">M</text></g></g>
           </g>
@@ -557,7 +568,7 @@ svg text{font-family:var(--mono)}
         <span class="dot" style="background:var(--heavy)"></span>Heavy
         <span class="dot" style="background:var(--moderate)"></span>Moderate
         <span class="dot" style="background:var(--clear)"></span>Clear
-        <span class="dot" style="background:var(--transit);border-radius:50%"></span>Metro
+        <span class="dot" style="background:var(--transit);border-radius:50%"></span>Transit
         <span class="dot" style="background:var(--ai)"></span>Shuttle
         <span class="dot" style="background:var(--eco);border-radius:50%"></span>Bikes
         <span class="dot" style="background:var(--moderate);transform:rotate(45deg)"></span>Fan zone
@@ -570,7 +581,7 @@ svg text{font-family:var(--mono)}
       <div class="panel reveal">
         <div class="panel-h"><h3>Map Layers</h3><span class="sub">FILTERS</span></div>
         <div class="panel-b" style="padding-top:6px">
-          <label class="switch"><input type="checkbox" checked data-layer="metro"/><span class="track"><span class="knob"></span></span><span class="sw-label"><span class="sq" style="background:var(--transit)"></span>Metro lines</span></label>
+          <label class="switch"><input type="checkbox" checked data-layer="metro"/><span class="track"><span class="knob"></span></span><span class="sw-label"><span class="sq" style="background:var(--transit)"></span>Transit lines</span></label>
           <label class="switch"><input type="checkbox" checked data-layer="shuttle"/><span class="track"><span class="knob"></span></span><span class="sw-label"><span class="sq" style="background:var(--ai)"></span>Shuttle routes</span></label>
           <label class="switch"><input type="checkbox" checked data-layer="bikes"/><span class="track"><span class="knob"></span></span><span class="sw-label"><span class="sq" style="background:var(--eco)"></span>Micro-mobility</span></label>
           <label class="switch"><input type="checkbox" checked data-layer="fanzones"/><span class="track"><span class="knob"></span></span><span class="sw-label"><span class="sq" style="background:var(--moderate)"></span>Fan zones</span></label>
@@ -587,20 +598,20 @@ svg text{font-family:var(--mono)}
         <div class="panel-h"><h3>Sustainability Impact</h3><span class="sub">TODAY</span></div>
         <div class="panel-b">
           <div class="bars">
-            <div class="bar"><small>Metro</small><div class="tr"><i data-w="34" style="--bc:var(--eco)"></i></div><span class="pct">34%</span></div>
+            <div class="bar"><small>Transit</small><div class="tr"><i data-w="34" style="--bc:var(--eco)"></i></div><span class="pct">34%</span></div>
             <div class="bar"><small>E-Shuttle</small><div class="tr"><i data-w="18" style="--bc:var(--ai)"></i></div><span class="pct">18%</span></div>
             <div class="bar"><small>Bike / Scooter</small><div class="tr"><i data-w="12" style="--bc:var(--transit)"></i></div><span class="pct">12%</span></div>
             <div class="bar"><small>Walking</small><div class="tr"><i data-w="4" style="--bc:#34D399"></i></div><span class="pct">4%</span></div>
             <div class="bar"><small>Private car</small><div class="tr"><i data-w="32" style="--bc:var(--heavy)"></i></div><span class="pct">32%</span></div>
           </div>
           <div class="co2-note">
-            <span>g CO₂ / fan-km →</span><span style="color:var(--heavy)">CAR 171g</span><span style="color:var(--ai)">SHUTTLE 41g</span><span style="color:var(--transit)">METRO 28g</span><span style="color:var(--eco)">BIKE 0g</span>
+            <span>g CO₂ / fan-km →</span><span style="color:var(--heavy)">CAR 171g</span><span style="color:var(--ai)">SHUTTLE 41g</span><span style="color:var(--transit)">TRANSIT 28g</span><span style="color:var(--eco)">BIKE 0g</span>
           </div>
         </div>
       </div>
 
       <div class="panel reveal">
-        <div class="panel-h"><h3>Live Network Feed</h3><span class="mono" style="color:var(--eco);font-size:11px">● streaming</span></div>
+        <div class="panel-h"><h3>Simulated Network Feed</h3><span class="mono" style="color:var(--eco);font-size:11px">● streaming</span></div>
         <div class="panel-b" style="padding-top:6px"><ul class="feed" id="feedList"></ul></div>
       </div>
     </aside>
@@ -644,7 +655,7 @@ svg text{font-family:var(--mono)}
         <div class="panel-h"><h3>Why go green?</h3><span class="sub">THIS FIXTURE</span></div>
         <div class="panel-b" style="font-size:13px;color:#B9C6D9;display:flex;flex-direction:column;gap:10px">
           <p>🚗 One car trip to the stadium ≈ <b class="mono" style="color:var(--heavy)">+4.2 kg CO₂</b> + parking risk.</p>
-          <p>🚇 The eco-route saves <b class="mono" style="color:var(--eco)">1.8 kg CO₂</b> — that's <b style="color:var(--eco)">74 trees</b>' daily work, per 1,000 fans.</p>
+          <p>🚇 The eco-route avoids <b class="mono" style="color:var(--eco)">1.8 kg CO₂e</b> vs driving per fan (modeled).</p>
           <p>🎟️ Green-mode fans earn <b style="color:var(--transit)">2× Fan Points</b> redeemable at fan zones.</p>
         </div>
       </div>
@@ -655,9 +666,9 @@ svg text{font-family:var(--mono)}
         <!-- CARD A — Recommended eco route -->
         <article class="route-card rec selected" data-route="eco" role="button" tabindex="0" aria-pressed="true">
           <div class="rc-ico eco"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 11h14M9 21l1.5-3M15 21l-1.5-3"/><circle cx="9" cy="14" r="1" fill="currentColor"/><circle cx="15" cy="14" r="1" fill="currentColor"/></svg></div>
-          <div class="rc-mid"><h3>Eco Route — Recommended</h3><p class="rc-sub">Metro Line 1 + 5-min e-scooter · transfers: 1</p></div>
+          <div class="rc-mid"><h3>Eco Route — Recommended</h3><p class="rc-sub">Transit 6 + walk 3 + e-scooter 3 (last mile) · transfers: 1</p></div>
           <div class="rc-right"><p class="rc-time">24<span>MIN</span></p>
-            <div class="rc-meta"><span class="chip co2 good">−1.8 kg CO₂</span><span class="chip fare">$3.50</span></div></div>
+            <div class="rc-meta"><span class="chip co2 good">+2.4 kg CO₂e · 1.8 avoided vs driving</span><span class="chip fare">$3.50</span></div></div>
           <div class="rc-foot"><span class="badge leaf">🌿 Lowest Footprint</span><span class="rc-cta">Selected ✓</span></div>
         </article>
 
@@ -666,7 +677,7 @@ svg text{font-family:var(--mono)}
           <div class="rc-ico violet"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="13" rx="2.5"/><path d="M4 10h16M7 21v-2.5M17 21v-2.5"/><circle cx="8.5" cy="13.5" r="1" fill="currentColor"/><circle cx="15.5" cy="13.5" r="1" fill="currentColor"/></svg></div>
           <div class="rc-mid"><h3>Fast Express Shuttle</h3><p class="rc-sub">Dedicated match-day bus ES-4 · non-stop</p></div>
           <div class="rc-right"><p class="rc-time">20<span>MIN</span></p>
-            <div class="rc-meta"><span class="chip co2 good">−1.1 kg CO₂</span><span class="chip fare">$5.00</span></div></div>
+            <div class="rc-meta"><span class="chip co2 good">+3.1 kg CO₂e · 1.1 avoided vs driving</span><span class="chip fare">$5.00</span></div></div>
           <div class="rc-foot"><span class="badge zap">⚡ Fastest Green Option</span><span class="rc-cta">View details →</span></div>
         </article>
 
@@ -700,7 +711,7 @@ svg text{font-family:var(--mono)}
             <ul class="sum" id="sumList"></ul>
             <div class="qr-row">
               <div class="qr-box" id="qrBox"><div class="qr" id="qrGrid" aria-label="Fan transit pass QR code"></div></div>
-              <div><b>Digital Fan Pass</b><p>One QR for metro + shuttle + docks. Scan at any gate.</p></div>
+              <div><b>Digital Fan Pass</b><p>One QR for transit + shuttle + docks. Scan at any gate.</p></div>
             </div>
             <div style="display:flex;gap:10px;flex-wrap:wrap">
               <button class="btn primary" id="startBtn">▶ Start Navigation</button>
@@ -708,6 +719,9 @@ svg text{font-family:var(--mono)}
             </div>
           </div>
         </div>
+        <p style="font:500 11px var(--mono);color:var(--muted);padding:14px 18px 0;line-height:1.8">
+          Times include security gate wait at the selected match-clock state. Timeline is illustrative; segment durations are scenario parameters, not timetable values. Eco fare = bundled illustrative fare (~PRESTO base + nominal last-mile allowance), not itemized micromobility pricing. Eco Route is recommended for lowest cost and largest avoided CO₂e; the shuttle is faster but costs ~43% more and avoids 0.7 kg less.
+        </p>
       </div>
     </div>
   </div>
@@ -767,7 +781,7 @@ svg text{font-family:var(--mono)}
           <span class="live-badge" style="padding:5px 11px"><span class="live-dot"></span> LIVE</span>
         </div>
         <div class="comp-cell"><span>Toggle switch</span>
-          <label class="switch"><input type="checkbox" checked/><span class="track"><span class="knob"></span></span><span class="sw-label">Metro lines</span></label>
+          <label class="switch"><input type="checkbox" checked/><span class="track"><span class="knob"></span></span><span class="sw-label">Transit lines</span></label>
         </div>
         <div class="comp-cell"><span>Input</span>
           <div class="in-wrap" style="width:230px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input value="Search stations…"/></div>
@@ -818,6 +832,13 @@ svg text{font-family:var(--mono)}
 </section>
 </main>
 
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <b>Independent concept prototype</b> · simulated data · not affiliated with FIFA, host cities, or transit agencies.<br>
+  Time model and carbon model are independently calibrated scenario layers — not outputs of a shared OD simulation; do not combine them to derive implied speeds.<br>
+  Solo Product Designer: <b>Melika Soleimani</b> · MIT-licensed code.
+</footer>
+
 <div class="toast" id="toast"><span class="tk"></span><span id="toastMsg"></span></div>
 
 <script>
@@ -840,19 +861,19 @@ let CITY=CITIES.toronto;
 
 /* ---------- routes data ---------- */
 const ROUTES={
-  eco:{title:"Metro Line 1 + E-Scooter",badge:'<span class="badge leaf">🌿 Lowest Footprint</span>',
-    time:"24 min",fare:"$3.50",co2:"−1.8 kg",co2good:true,arrivePad:45,crowd:"Low",
-    steps:[["walk","Walk to Queen Station","4 min · 300 m · step-free"],
-           ["metro","Metro Line 1 → Exhibition","14 min · 6 stops · every 4 min"],
-           ["scooter","E-scooter — Lakeshore Trail","5 min · 1.2 km · dock at Gate B"],
+  eco:{title:"Transit + Walk + E-Scooter",badge:'<span class="badge leaf">🌿 Lowest Footprint</span>',
+    time:"24 min",fare:"$3.50",co2:"+2.4 kg CO₂e · 1.8 avoided vs driving",co2good:true,arrivePad:45,crowd:"Low",
+    steps:[["walk","Walk to transit stop","3 min · 300 m · step-free"],
+           ["metro","Transit (GO rail / streetcar)","6 min · nearest regional stop"],
+           ["scooter","E-scooter — last mile","3 min · ~1.2 km stop→gate"],
            ["gate","Arrive at Gate B","Security wait ≈ 4 min"]]},
   shuttle:{title:"Express Match-Day Shuttle",badge:'<span class="badge zap">⚡ Fastest Green Option</span>',
-    time:"20 min",fare:"$5.00",co2:"−1.1 kg",co2good:true,arrivePad:41,crowd:"Medium",
+    time:"20 min",fare:"$5.00",co2:"+3.1 kg CO₂e · 1.1 avoided vs driving",co2good:true,arrivePad:41,crowd:"Medium",
     steps:[["walk","Walk to Shuttle Stop S2","3 min · 220 m"],
            ["bus","Shuttle ES-4 — non-stop","15 min · dedicated bus lane"],
            ["gate","Arrive at Gate A","Security wait ≈ 6 min"]]},
   car:{title:"Drive / Rideshare",badge:'<span class="badge alert">⚠️ High Delay Risk</span>',
-    time:"45 min",fare:"≈ $18.00",co2:"+4.2 kg",co2good:false,arrivePad:58,crowd:"High",
+    time:"45 min",fare:"≈ $18.00",co2:"+4.2 kg CO₂",co2good:false,arrivePad:58,crowd:"High",
     steps:[["car","Drive via Gardiner Expy","22 min · heavy congestion"],
            ["walk","Queue + park at Lot W","18 min · ⚠️ capacity 82% full"],
            ["gate","Arrive at Gate C","Security wait ≈ 17 min"]]}
@@ -903,7 +924,7 @@ function renderGates(){
     <span class="g-wait">${g[2]} min</span><span class="g-state st-${g[1]}">${g[1]}</span></li>`).join("");
   CITY.gates.forEach((g,i)=>{const d=$("#gateDot"+i);if(d)d.setAttribute("class","g-dot st-"+g[1]);});
 }
-setInterval(()=>{ // live gate drift
+setInterval(()=>{
   const i=Math.floor(Math.random()*4);const g=CITY.gates[i];
   g[2]=Math.max(2,Math.min(30,g[2]+Math.floor(Math.random()*4)-1));
   g[1]=g[2]<7?"clear":g[2]<14?"moderate":"heavy";
@@ -913,7 +934,7 @@ setInterval(()=>{ // live gate drift
     row.querySelector(".g-dot2").className="g-dot2 st-"+g[1];row.classList.remove("row-flash");void row.offsetWidth;row.classList.add("row-flash");}
   const d=$("#gateDot"+i);if(d)d.setAttribute("class","g-dot st-"+g[1]);
 },4000);
-setInterval(()=>{ // CO2 + fans drift
+setInterval(()=>{
   CITY.co2+=0.02+Math.random()*0.05;const el=$("#mCo2");el.textContent=CITY.co2.toFixed(2);el._v=CITY.co2;
   el.classList.remove("flash");void el.offsetWidth;el.classList.add("flash");
   CITY.fans+=Math.floor(Math.random()*90-30);$("#mFans").textContent=CITY.fans.toLocaleString("en-US");$("#mFans")._v=CITY.fans;
